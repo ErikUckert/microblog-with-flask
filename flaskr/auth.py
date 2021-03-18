@@ -22,7 +22,7 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif password is not base64.b64decode("bWVpc2VuTWFubjE5ODgh").decode("utf-8"):
+        elif password != base64.b64decode("bWVpc2VuTWFubjE5ODgh").decode("utf-8"):
             error = 'Sorry bro, you are not welcome here!'
         elif db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
