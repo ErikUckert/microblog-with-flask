@@ -22,7 +22,7 @@ You can find informations on how to do that [here](https://www.python.org/about/
 3. Check if you have pip installed
     
     ```
-    $ python3 -m pip3 --version
+    $ pip3 --version
     ```
 
     otherwise go install it. Look up how to do that [here](https://pypi.org/project/pip/).
@@ -46,6 +46,6 @@ You can find informations on how to do that [here](https://www.python.org/about/
 4. Go to the flaskr main directory and install the package
 
     ```
-    $ pip install -e .
+    $ pip3 install -e .
     ```
 
