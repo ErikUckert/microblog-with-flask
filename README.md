@@ -3,7 +3,7 @@
 
 
 
-# Flaskr - A microblog power by flask
+# Flaskr - A microblog powered by flask
 
 
 This is a little microblog demo for setting up flask
