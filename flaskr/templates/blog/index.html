@@ -20,6 +20,9 @@
         {% endif %}
       </header>
       <p class="body">{{ post['body'] }}</p>
+      {% for file in files %}
+        <img src="{{ url_for('blog.upload', filename=file) }}" style="width: 64px">
+      {% endfor %}
     </article>
     {% if not loop.last %}
       <hr>

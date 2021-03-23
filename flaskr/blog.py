@@ -28,7 +28,8 @@ def index():
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
-    return render_template('blog/index.html', posts=posts)
+    files = os.listdir(current_app.config['UPLOAD_PATH'])
+    return render_template('blog/index.html', posts=posts, files=files)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
@@ -37,6 +38,7 @@ def create():
         title = request.form['title']
         body = request.form['body']
         uploaded_file = request.files['file']
+        
         filename = secure_filename(uploaded_file.filename)
         if filename != '':
             file_ext = os.path.splitext(filename)[1]
@@ -115,3 +117,7 @@ def delete(id):
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('blog.index'))
+
+@bp.route('/uploads/<filename>')
+def upload(filename):
+    return send_from_directory(current_app.config['UPLOAD_PATH'], filename)
