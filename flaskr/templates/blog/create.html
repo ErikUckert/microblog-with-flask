@@ -5,11 +5,19 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post">
+  <form method="post" action="" enctype="multipart/form-data">
     <label for="title">Title</label>
     <input name="title" id="title" value="{{ request.form['title'] }}" required>
     <label for="body">Body</label>
     <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
-    <input type="submit" value="Save">
+    <h1>File Upload</h1>
+
+    <p><input type="file" name="file"></p>
+
+    {% for file in files %}
+    <img src="{{ url_for('upload', filename=file) }}" style="width: 64px">
+    {% endfor %}
+    <p><input type="submit" value="Submit"></p>
   </form>
+  <hr>
 {% endblock %}
