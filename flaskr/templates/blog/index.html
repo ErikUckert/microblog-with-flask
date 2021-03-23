@@ -21,7 +21,9 @@
       </header>
       <p class="body">{{ post['body'] }}</p>
       {% for file in files %}
-        <img src="{{ url_for('blog.upload', filename=file) }}" style="width: 64px">
+        {% if post['title']  in file  %}
+          <img src="{{ url_for('blog.upload', filename=file) }}" style="width: 64px">
+        {% endif %}
       {% endfor %}
     </article>
     {% if not loop.last %}

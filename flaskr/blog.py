@@ -45,7 +45,7 @@ def create():
             if file_ext not in current_app.config['UPLOAD_EXTENSIONS'] or \
                     file_ext != validate_image(uploaded_file.stream):
                 abort(400)
-            uploaded_file.save(os.path.join(current_app.config['UPLOAD_PATH'], filename))
+            uploaded_file.save(os.path.join(current_app.config['UPLOAD_PATH'], title + '_' + filename))
 
         error = None
 
