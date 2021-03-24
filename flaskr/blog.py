@@ -1,4 +1,5 @@
 import os
+import random
 import imghdr
 
 from flask import (
@@ -24,7 +25,7 @@ def validate_image(stream):
 def index():
     db = get_db()
     posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
+        'SELECT p.id, title, body, created, author_id, username, hashval'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
@@ -38,6 +39,9 @@ def create():
         title = request.form['title']
         body = request.form['body']
         uploaded_file = request.files['file']
+        hashval = hash(title)
+        if hashval < 1:
+            hashval = hashval * -1
         
         filename = secure_filename(uploaded_file.filename)
         if filename != '':
@@ -45,7 +49,7 @@ def create():
             if file_ext not in current_app.config['UPLOAD_EXTENSIONS'] or \
                     file_ext != validate_image(uploaded_file.stream):
                 abort(400)
-            uploaded_file.save(os.path.join(current_app.config['UPLOAD_PATH'], title + '_' + filename))
+            uploaded_file.save(os.path.join(current_app.config['UPLOAD_PATH'], str(hashval) + '_' + filename))
 
         error = None
 
@@ -57,9 +61,9 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
+                'INSERT INTO post (title, body, author_id, hashval)'
+                ' VALUES (?, ?, ?, ?)',
+                (title, body, g.user['id'], hashval)
             )
             db.commit()
             return redirect(url_for('blog.index'))
@@ -68,7 +72,7 @@ def create():
 
 def get_post(id, check_author=True):
     post = get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
+        'SELECT p.id, title, body, created, author_id, username, hashval'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' WHERE p.id = ?',
         (id,)
