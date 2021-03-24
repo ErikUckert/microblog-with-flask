@@ -1,4 +1,5 @@
 import os
+from os.path import join, dirname, realpath
 
 from flask import Flask
 
@@ -9,8 +10,8 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
         MAX_CONTENT_LENGTH = 16 * 1024 * 1024,
-        UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif'],
-        UPLOAD_PATH = '/mnt/c/_MyData/005_Local_Repos/microblog-with-flask/flaskr/uploads'
+        UPLOAD_EXTENSIONS = ['.jpg', '.png'],
+        UPLOAD_PATH = join(dirname(realpath(__file__)), 'static/uploads/')
     )
 
     if test_config is None:
