@@ -1,6 +1,7 @@
 import os
 import random
 import imghdr
+import time
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, current_app, send_from_directory, abort
@@ -10,6 +11,8 @@ from werkzeug.utils import secure_filename
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
+
+from PIL import Image
 
 bp = Blueprint('blog', __name__)
 
@@ -39,17 +42,25 @@ def create():
         title = request.form['title']
         body = request.form['body']
         uploaded_files = request.files.getlist('files[]')
-        hashval = hash(title)
+        hashval = hash(time.time())
         if hashval < 1:
             hashval = hashval * -1
         for uploaded_file in uploaded_files:
+
             filename = secure_filename(uploaded_file.filename)
             if filename != '':
                 file_ext = os.path.splitext(filename)[1]
                 if file_ext not in current_app.config['UPLOAD_EXTENSIONS'] or \
                         file_ext != validate_image(uploaded_file.stream):
                     abort(400)
-                uploaded_file.save(os.path.join(current_app.root_path, current_app.config['UPLOAD_PATH'], str(hashval) + '_' + filename))
+                
+                baseheight = 560
+                img = Image.open(uploaded_file)
+                hpercent = (baseheight / float(img.size[1]))
+                wsize = int((float(img.size[0]) * float(hpercent)))
+                img = img.resize((wsize, baseheight), Image.ANTIALIAS)
+
+                img.save(os.path.join(current_app.root_path, current_app.config['UPLOAD_PATH'], str(hashval) + '_' + filename))
 
         error = None
 
