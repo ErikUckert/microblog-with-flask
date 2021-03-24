@@ -11,8 +11,7 @@
     <label for="body">Body</label>
     <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
     <h1>File Upload</h1>
-
-    <p><input type="file" name="file"></p>
+    <p><input type="file" name="files[]" multiple="true"></p>
     <p><input type="submit" value="Submit"></p>
   </form>
   <hr>

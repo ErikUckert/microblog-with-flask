@@ -8,7 +8,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-        MAX_CONTENT_LENGTH = 1024 * 1024,
+        MAX_CONTENT_LENGTH = 16 * 1024 * 1024,
         UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif'],
         UPLOAD_PATH = '/mnt/c/_MyData/005_Local_Repos/microblog-with-flask/flaskr/uploads'
     )
