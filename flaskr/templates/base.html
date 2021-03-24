@@ -7,6 +7,7 @@
   <title>Don't Panic!</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
   <style>
     body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </style>
@@ -34,6 +35,13 @@
     {% block content %}{% endblock %}
   </section>
 </body>
+<footer class="w3-center w3-padding">  
+  <p class="logo">
+    <span>Made with <span>&#10084;</span> by</span>
+    <span>erik</span>uckert<span>|dev&design</span>
+    <a href="https://github.com/ErikUckert" target="_blank"><i class="fab fa-github"></i></a>
+   </p>
+</footer>
 </html>
 
 <!doctype html>

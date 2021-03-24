@@ -18,6 +18,13 @@ body {
   background: white;
 }
 
+footer,
+header,
+menu,
+nav {
+	display: block
+}
+
 h1, h2, h3, h4, h5, h6 {
   color: #ff8552;
   margin: 1rem 0;
@@ -161,4 +168,33 @@ p {
 
 .uppercase {
   text-transform: uppercase;
+}
+
+.w3-center {
+	display: inline-block;
+  text-align: center
+}
+
+.logo{
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 2px;
+margin: 10px;
+}
+
+.logo span{
+  font-weight: 300;
+}
+
+footer {
+  background: #a2e8dd;
+  width: 100%;
+}
+@media (max-width:600px) {
+	.logo {
+		font-size: 0.8rem;
+		letter-spacing: 1.5px;
+		margin: 10px;
+	}
 }
