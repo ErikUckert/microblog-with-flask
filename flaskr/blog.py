@@ -17,7 +17,7 @@ from PIL import Image
 bp = Blueprint('blog', __name__)
 
 def validate_image(stream):
-    header = stream.read(1024)  # 512 bytes should be enough for a header check
+    header = stream.read(512)  # 512 bytes should be enough for a header check
     stream.seek(0)  # reset stream pointer
     format = imghdr.what(None, header)
     if not format:
