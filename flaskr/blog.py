@@ -2,6 +2,7 @@ import os
 import random
 import imghdr
 import time
+import fnmatch
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, current_app, send_from_directory, abort
@@ -10,7 +11,7 @@ from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 
 from flaskr.auth import login_required
-from flaskr.db import get_db
+from flaskr.db import get_db, query_db
 
 from PIL import Image
 
@@ -40,6 +41,15 @@ def store_image(uploaded_file, hashval):
             abort(400) 
         img = resize_image(uploaded_file, 560)        
         img.save(os.path.join(current_app.root_path, current_app.config['UPLOAD_PATH'], str(hashval) + '_' + filename))
+
+def delete_images(id):
+    post = query_db('select * from post where id = ?', [id], one=True)
+    hashval = post['hashval']
+
+    for image in os.listdir(current_app.config['UPLOAD_PATH']):
+
+        if hashval in image:
+            os.remove(os.path.join(current_app.config['UPLOAD_PATH'], image))
 
 @bp.route('/')
 def index():
@@ -134,8 +144,12 @@ def update(id):
 def delete(id):
     get_post(id)
     db = get_db()
+
+    delete_images(id)
+
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
+
     return redirect(url_for('blog.index'))
 
 @bp.route('/uploads/<filename>')
