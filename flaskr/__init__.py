@@ -7,7 +7,7 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
+        SECRET_KEY='\xd9\xdb0A\x04\xcc\xc6UJ\x1f\xa3st\xa1\x88"\xc3\xf4i\x86v\xd1y\xe1',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
         MAX_CONTENT_LENGTH = 128 * 1024 * 1024,
         UPLOAD_EXTENSIONS = ['.jpg', '.png'],
