@@ -24,6 +24,23 @@ def validate_image(stream):
         return None
     return '.' + (format if format != 'jpeg' else 'jpg')
 
+def resize_image(uploaded_file, baseheight):
+    img = Image.open(uploaded_file)
+    hpercent = (baseheight / float(img.size[1]))
+    wsize = int((float(img.size[0]) * float(hpercent)))
+    img = img.resize((wsize, baseheight), Image.ANTIALIAS)
+    return img
+
+def store_image(uploaded_file, hashval):
+    filename = secure_filename(uploaded_file.filename)
+    if filename != '':
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext not in current_app.config['UPLOAD_EXTENSIONS'] or \
+                file_ext != validate_image(uploaded_file.stream):
+            abort(400) 
+        img = resize_image(uploaded_file, 560)        
+        img.save(os.path.join(current_app.root_path, current_app.config['UPLOAD_PATH'], str(hashval) + '_' + filename))
+
 @bp.route('/')
 def index():
     db = get_db()
@@ -45,23 +62,7 @@ def create():
         hashval = hash(time.time())
         if hashval < 1:
             hashval = hashval * -1
-        for uploaded_file in uploaded_files:
-
-            filename = secure_filename(uploaded_file.filename)
-            if filename != '':
-                file_ext = os.path.splitext(filename)[1]
-                if file_ext not in current_app.config['UPLOAD_EXTENSIONS'] or \
-                        file_ext != validate_image(uploaded_file.stream):
-                    abort(400)
-                
-                baseheight = 560
-                img = Image.open(uploaded_file)
-                hpercent = (baseheight / float(img.size[1]))
-                wsize = int((float(img.size[0]) * float(hpercent)))
-                img = img.resize((wsize, baseheight), Image.ANTIALIAS)
-
-                img.save(os.path.join(current_app.root_path, current_app.config['UPLOAD_PATH'], str(hashval) + '_' + filename))
-
+        
         error = None
 
         if not title:
@@ -77,6 +78,10 @@ def create():
                 (title, body, g.user['id'], hashval)
             )
             db.commit()
+
+            for uploaded_file in uploaded_files:
+                store_image(uploaded_file, hashval)
+
             return redirect(url_for('blog.index'))
 
     return render_template('blog/create.html')
