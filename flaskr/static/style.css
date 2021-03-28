@@ -150,9 +150,7 @@ input[type=submit] {
 .w3-card-4 {
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.w3-margin {
-  margin: 8px !important;
-}
+
 .w3-white {
     color: #000 !important;
     background-color: #fff !important;
@@ -180,7 +178,7 @@ p {
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 2px;
-margin: 10px;
+  margin: 10px;
 }
 
 .logo span{
@@ -191,6 +189,13 @@ footer {
   background: #a2e8dd;
   width: 100%;
 }
+
+.fa-globe-europe {
+  font-size: 2rem;
+  color: #ff8552;
+  margin-right: 2rem;
+}
+
 @media (max-width:600px) {
 	.logo {
 		font-size: 1rem;

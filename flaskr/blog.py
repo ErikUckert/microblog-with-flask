@@ -40,7 +40,7 @@ def store_image(uploaded_file, hashval):
                 file_ext != validate_image(uploaded_file.stream):
             abort(400) 
         img = resize_image(uploaded_file, 560)        
-        img.save(os.path.join(current_app.root_path, current_app.config['UPLOAD_PATH'], str(hashval) + '_' + filename))
+        img.save(os.path.join(current_app.root_path, current_app.config['UPLOAD_PATH'], str(time.time()) + str(hashval) + '_' + filename))
 
 def delete_images(id):
     post = query_db('select * from post where id = ?', [id], one=True)
