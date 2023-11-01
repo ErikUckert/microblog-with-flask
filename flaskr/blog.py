@@ -3,6 +3,7 @@ import random
 import imghdr
 import time
 import fnmatch
+from pathlib import Path
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, current_app, send_from_directory, abort
@@ -29,7 +30,7 @@ def resize_image(uploaded_file, baseheight):
     img = Image.open(uploaded_file)
     hpercent = (baseheight / float(img.size[1]))
     wsize = int((float(img.size[0]) * float(hpercent)))
-    img = img.resize((wsize, baseheight), Image.ANTIALIAS)
+    img = img.resize((wsize, baseheight), Image.Resampling.LANCZOS)
     return img
 
 def store_image(uploaded_file, hashval):
@@ -39,8 +40,8 @@ def store_image(uploaded_file, hashval):
         if file_ext not in current_app.config['UPLOAD_EXTENSIONS'] or \
                 file_ext != validate_image(uploaded_file.stream):
             abort(400) 
-        img = resize_image(uploaded_file, 560)        
-        img.save(os.path.join(current_app.root_path, current_app.config['UPLOAD_PATH'], str(time.time()) + str(hashval) + '_' + filename))
+        img = resize_image(uploaded_file, 560)    
+        img.save(os.path.join(current_app.root_path, current_app.config['UPLOAD_PATH'], str(time.time()) + '_' + str(hashval) + '_' + filename))
 
 def delete_images(id):
     post = query_db('select * from post where id = ?', [id], one=True)
@@ -60,7 +61,14 @@ def index():
         ' ORDER BY created DESC'
     ).fetchall()
     files = os.listdir(current_app.config['UPLOAD_PATH'])
-    return render_template('blog/index.html', posts=posts, files=files)
+    # for file in files:
+    #     # print(os.path.getmtime(os.path.join(current_app.config['UPLOAD_PATH'], file)))
+    #     file = str(os.path.getmtime(os.path.join(current_app.config['UPLOAD_PATH'], file))) + '.png'
+    # print(file)
+    print(files)
+    print('######')
+    print(sorted(files))
+    return render_template('blog/index.html', posts=posts, files=sorted(files))
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required

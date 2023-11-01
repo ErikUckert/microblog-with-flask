@@ -110,6 +110,7 @@ ENV/
 env.bak/
 venv.bak/
 venv_flask/
+myflaskrvenv/
 
 # Spyder project settings
 .spyderproject
@@ -130,3 +131,6 @@ dmypy.json
 .pyre/
 
 *.pyc
+
+# static content
+flaskr/static/uploads/
